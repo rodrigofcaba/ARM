@@ -9,49 +9,52 @@
 
 * Configuration:
 
-* 		First of all, open "/02_dofiles/99_onlywide" file and select the datasets to download
-*		Configure also your 7-zip installation directory
-* 		If you want to get the long format (panel data), go to "/02_dofiles/01_setup.do" and uncomment lines 15 to 18.
-*		Once you have done that you can decide whether to reshape it again to have a better looking (see RESHAPE AGAIN section)
+* 		- Set your working directory in the "projectdir" global variable.
+*		- Choose the file(s) to work with and pass it(them) to the setup dofile (using the "filenames" local).
+*		- Specify the year for which you want the table in the "time" local.
+*		- Commit your changes to github using git_push.do passing the commit text
+*		- If you are stargting the project, create a github repository and 
+*			run git_config dofile passing the name of the repository.
+
+***************
+* GIT CONFIG: *
+***************
+
+*do git_config.do ARM
+
+
+********************************************************************************
+
+**********
+* SETUP: *
+**********
+
+
+clear all
+set more off
 
 global projectdir "C:/Users/Rodrigo/Desktop/ARM"
 
 cd $projectdir
 
-do ./02_dofiles/01_setup.do
+local time 2020
 
-********************************************************************************
+local filenames ilc_di01 ilc_di02 nama_10_pc
 
-*****************
-* RESHAPE AGAIN *
-*****************
-
-* [OPTIONAL] reshape again to more readable data using "greshape" 
-* (package that uses c language functions = very fast):
-
-cap which gtools
-if _rc==111 {
-	ssc install gtools, replace
+foreach x of local filenames {
+	do ./02_dofiles/01_setup.do `x' `time'
 }
 
-* Configure your variables to the desired result:
-
-greshape wide y, i(geo year unit) j(na_item) string 
-ren y* y_*
-
-save ./04_master/$filename.dta, replace  // save the final file
-
+do git_push.do "Final setup using xteurostat"
 ********************************************************************************
 
 *********************
 * Master file start *
 *********************
 
-* Select the file to work with:
+help xteurostat
 
-global filename "nama_10_pc"
+xteurostat nama_10_pc, clear
 
-use ./04_master/$filename.dta, clear
-
-
+table
 
