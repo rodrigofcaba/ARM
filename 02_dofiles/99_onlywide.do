@@ -1,12 +1,38 @@
-*cleans Eurostat database to wide format
-* Once it is downloaded and extracted, now we clean it up and load it.
+********************************************************************************
+* Cleans Eurostat database to wide format
+********************************************************************************
+global sevenzip_location "C:\Program Files\7-Zip\7zG.exe"
+
+global filelist ///
+ nama_10_pc   /// // GDP per capita
+ ilc_di01   /// // Income deciles by quantiles
+ ilc_di02  // Income deciles by different income groups
+
+foreach x of global filelist {
+
+*************************************
+* Download and extract the datasets *
+*************************************
+
+cd "C:/Users/Rodrigo/Desktop/ARM/01_raw/" // This is for Rodrigo's windows working directory
+display "`x'"    // just show the file on the screen
+local filename "`x'.tsv.gz"
+copy "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2F`x'.tsv.gz" "`filename'", replace
+shell $sevenzip_location e -y `x'.tsv.gz
+shell rm `filename'
+di "." _cont  // displays a dot for each file
+
+
+*************************************
+* Clean the datasets to wide format *
+*************************************
 
 clear
 
 cap cd "C:/Users/Rodrigo/Desktop/ARM" // This is for Rodrigo's windows working directory
 cap cd "your mac directory" // This is for Álvaro's Mac working directory
 
-import delimited using ./01_raw/nama_10_gdp.tsv, delim(tab) clear   
+import delimited using ./01_raw/`x'.tsv, delim(tab) clear   
 
 split v1, p(,) gen(a)
 drop v1
@@ -38,9 +64,12 @@ foreach k of varlist v* {
 drop in 1  // drop the first row
 destring _all, replace
 
+
 **** store variable names as variable labels
-foreach x of varlist y* {  
-lab var `x' "`x'"
+foreach l of varlist y* {  
+lab var `l' "`l'"
 }
 
-save ./04_master/nama_10_gdp.dta, replace  // save the final file
+save ./04_master/`x'.dta, replace  // save the final file
+
+}
