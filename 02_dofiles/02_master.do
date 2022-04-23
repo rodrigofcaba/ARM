@@ -14,6 +14,10 @@
 * 		If you want to get the long format (panel data), go to "/02_dofiles/01_setup.do" and uncomment lines 15 to 18.
 *		Once you have done that you can decide whether to reshape it again to have a better looking (see RESHAPE AGAIN section)
 
+global projectdir "C:/Users/Rodrigo/Desktop/ARM"
+
+cd $projectdir
+
 do ./02_dofiles/01_setup.do
 
 ********************************************************************************

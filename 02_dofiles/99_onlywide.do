@@ -18,10 +18,9 @@ cd "C:/Users/Rodrigo/Desktop/ARM/01_raw/" // This is for Rodrigo's windows worki
 display "`x'"    // just show the file on the screen
 local filename "`x'.tsv.gz"
 copy "https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=data%2F`x'.tsv.gz" "`filename'", replace
-shell $sevenzip_location e -y `x'.tsv.gz
-shell rm `filename'
+shell "$sevenzip_location" e -y `x'.tsv.gz
+erase `filename' 
 di "." _cont  // displays a dot for each file
-
 
 *************************************
 * Clean the datasets to wide format *
