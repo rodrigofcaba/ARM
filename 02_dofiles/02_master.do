@@ -31,7 +31,7 @@ cd $projectdir
 * GIT PUSH: *
 *************
 
-do git_push.do "Stupidly I added git_push.do to .gitignore. Now it is updated"
+do git_push.do "setup.do updated to be able to choose filter before download"
 
 ********************************************************************************
 
@@ -44,13 +44,12 @@ local time 2020
 local filenames ilc_di01
 
 *Specify units (NAC=National Currency, PPS=Purchase Power Standard, etc.)
-local filter PPS
+local filter NAC
 
 foreach x of local filenames {
 	do ./02_dofiles/01_setup.do `filter' `x' `time'
 }
 
-help xteurostat
 ********************************************************************************
 
 *********************

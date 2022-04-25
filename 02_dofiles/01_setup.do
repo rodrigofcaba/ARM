@@ -21,7 +21,7 @@ if (_rc==111){
 	
 discard // drop all ado programs in memory
 
-xteurostat `filename' TC_`filter', start(`time') g(country) clear
+xteurostat `filename' `filter', g(country) clear
 
 local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE EU27_2020
 
@@ -35,7 +35,7 @@ local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL P
 }
 
 * Drops observations for years different from the desired one
-*cap drop if time != "`time'"
+cap drop if time != "`time'"
 
 * Drop unnecesary variables according to differnet criteria
 cap drop D*_SHARE* P* Q*
@@ -44,11 +44,8 @@ cap drop A_* ?_M??_* *_MEI_*
 
 * Rename variables:
 forval i = 1/9 {
-cap rename D`i'_TC_PPS D`i'_PPS
-cap rename D`i'_TC_NAC D`i'_NAC
-
-cap la var D`i'_PPS "Decil `i' (PPS)"
-cap la var D`i'_PPS "Decil `i' (National Currency)"
+	cap rename D`i'_TC_`filter' D`i'_`filter'
+	cap la var D`i'_`filter' "Decil `i' (`filter')"
 }
 
 forval i = 40(10)70 {
@@ -72,4 +69,4 @@ rename NAMES_STD country
 order country
 
 * Saves the final file
-save ./04_master/`filename'.dta, replace
+save ./04_master/`filename'_`filter'.dta, replace
