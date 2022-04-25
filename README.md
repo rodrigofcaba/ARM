@@ -1,4 +1,4 @@
-# Advanced Research Method
+# Advanced Research Methods
 
 ## Potential experiment about European identity
 
