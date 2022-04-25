@@ -31,7 +31,7 @@ cd $projectdir
 * GIT PUSH: *
 *************
 
-do git_push.do "to confirm last version is uploaded"
+do git_push.do "Stupidly I added git_push.do to .gitignore. Now it is updated"
 
 ********************************************************************************
 
@@ -39,20 +39,25 @@ do git_push.do "to confirm last version is uploaded"
 * SETUP: *
 **********
 
-
 local time 2020
 
-local filenames ilc_di01 ilc_di02
+local filenames ilc_di01
+
+*Specify units (NAC=National Currency, PPS=Purchase Power Standard, etc.)
+local filter PPS
 
 foreach x of local filenames {
-	do ./02_dofiles/01_setup.do `x' `time'
+	do ./02_dofiles/01_setup.do `filter' `x' `time'
 }
 
+help xteurostat
 ********************************************************************************
 
 *********************
 * Master file start *
 *********************
+
+xteurostat ilc_di01, s(2020) g(country) clear
 
 use ./04_master/ilc_di01, clear
 br

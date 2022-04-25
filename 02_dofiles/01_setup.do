@@ -5,7 +5,7 @@
 * Authors: Rodrigo Fernández Caba & Álvaro San Román del Pozuelo
 ********************************************************************************
 
-args filename time 
+args filter filename time 
 
 *Check if xteurostat is installed:
 cap which xteurostat
@@ -13,9 +13,17 @@ if (_rc==111){
 	ssc install xteurostat, replace
 }
 
-xteurostat `filename', g(country) clear
+*Replace 'http' protocol with 'https':
+	* In windows:
+		cap ! (Get-Content -path "`c(sysdir_plus)'/x/xteurostat.ado" -Raw) -replace 'http','https'
+	* In MacOS:
+		cap ! sed -i 's/http/https/' "`c(sysdir_plus)'/x/xteurostat.ado"
+	
+discard // drop all ado programs in memory
 
-local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE
+xteurostat `filename' TC_`filter', start(`time') g(country) clear
+
+local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE EU27_2020
 
 * Drops countries that aren't members of the EU
 {
@@ -27,17 +35,20 @@ local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL P
 }
 
 * Drops observations for years different from the desired one
-drop if time != "`time'"
+*cap drop if time != "`time'"
 
 * Drop unnecesary variables according to differnet criteria
 cap drop D*_SHARE* P* Q*
-cap drop *_EUR *_NAC 
+cap drop *_EUR 
 cap drop A_* ?_M??_* *_MEI_*
 
 * Rename variables:
 forval i = 1/9 {
-cap rename D`i'_TC_PPS D`i'
-cap la var D`i' "Decil `i'"
+cap rename D`i'_TC_PPS D`i'_PPS
+cap rename D`i'_TC_NAC D`i'_NAC
+
+cap la var D`i'_PPS "Decil `i' (PPS)"
+cap la var D`i'_PPS "Decil `i' (National Currency)"
 }
 
 forval i = 40(10)70 {
