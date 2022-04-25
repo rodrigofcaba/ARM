@@ -5,6 +5,13 @@
 * Authors: Rodrigo Fernández Caba & Álvaro San Román del Pozuelo
 ********************************************************************************
 
+clear all
+set more off
+
+global projectdir "C:/Users/Rodrigo/Desktop/ARM"
+
+cd $projectdir
+
 * Configuration:
 
 * 		- Set your working directory in the "projectdir" global variable.
@@ -24,7 +31,7 @@
 * GIT PUSH: *
 *************
 
-do git_push.do "Final setup using xteurostat"
+do git_push.do "to confirm last version is uploaded"
 
 ********************************************************************************
 
@@ -32,12 +39,6 @@ do git_push.do "Final setup using xteurostat"
 * SETUP: *
 **********
 
-clear all
-set more off
-
-global projectdir "C:/Users/Rodrigo/Desktop/ARM"
-
-cd $projectdir
 
 local time 2020
 
