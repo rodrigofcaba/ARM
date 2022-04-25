@@ -7,6 +7,12 @@
 
 args filename time 
 
+*Check if xteurostat is installed:
+cap which xteurostat
+if (_rc==111){
+	ssc install xteurostat, replace
+}
+
 xteurostat `filename', g(country) clear
 
 local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE
