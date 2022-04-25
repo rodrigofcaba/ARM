@@ -40,7 +40,7 @@ cap drop if time != "`time'"
 * Drop unnecesary variables according to differnet criteria
 cap drop D*_SHARE* P* Q*
 cap drop *_EUR 
-cap drop A_* ?_M??_* *_MEI_*
+cap drop A_* ?_M??_*
 
 * Rename variables:
 forval i = 1/9 {
@@ -67,6 +67,8 @@ kountry country, from(iso2c)
 drop country
 rename NAMES_STD country
 order country
+
+cap replace country = "European Union - 27 countries" if country == "eu27_2020"
 
 * Saves the final file
 save ./04_master/`filename'_`filter'.dta, replace

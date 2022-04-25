@@ -41,15 +41,17 @@ do git_push.do "setup.do updated to be able to choose filter before download"
 
 local time 2020
 
-local filenames ilc_di01
+local filenames ilc_di03
 
 *Specify units (NAC=National Currency, PPS=Purchase Power Standard, etc.)
-local filter NAC
+local filter PPS
 
 foreach x of local filenames {
 	do ./02_dofiles/01_setup.do `filter' `x' `time'
 }
 
+keep country TOTAL_T_MEI_E_PPS
+sort country
 ********************************************************************************
 
 *********************
