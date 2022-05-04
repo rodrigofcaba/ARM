@@ -31,7 +31,7 @@ cd $projectdir
 * GIT PUSH: *
 *************
 
-do git_push.do "setup.do updated to be able to choose filter before download"
+do git_push.do "excel almost finished with GDP table"
 
 ********************************************************************************
 
