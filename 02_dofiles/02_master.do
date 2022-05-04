@@ -31,7 +31,7 @@ cd $projectdir
 * GIT PUSH: *
 *************
 
-do git_push.do "Final table finished"
+do git_push.do "excel almost finished with GDP table"
 
 ********************************************************************************
 
@@ -55,11 +55,11 @@ keep country TOTAL_T_MEI_E_PPS TOTAL_T_MED_E_PPS
 replace country= "Czechia" if country == "Czech Republic"
 replace country= "Slovakia" if country == "Slovak Republic"
 
-save ./01_raw/ilc_di03_PPS.dta, replace
+save ./03_temp/ilc_di03_PPS.dta, replace
 
-import excel using "./01_raw/tabla", firstrow sheet("Hoja2") clear
+import excel using "./03_temp/tabla", firstrow sheet("Hoja2") clear
 
-merge 1:1 country using "./01_raw/ilc_di03_PPS"
+merge 1:1 country using "./03_temp/ilc_di03_PPS"
 
 drop _merge
 
@@ -76,9 +76,6 @@ egen ranking_GDP= rank(GDPpercapitaPPS), field
 egen ranking_MEDIAN = rank(TOTAL_T_MED_E_PPS), field
 egen ranking_AVERAGE = rank(TOTAL_T_MEI_E_PPS), field
 
-egen average_ranking = rowmean(ranking_AVERAGE ranking_GDP ranking_MEDIAN)
-sort average_ranking
-br
 save ./04_master/final_table, clear
 
 
