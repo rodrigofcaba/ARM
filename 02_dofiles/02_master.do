@@ -31,7 +31,7 @@ cd $projectdir
 * GIT PUSH: *
 *************
 
-do git_push.do "excel almost finished with GDP table"
+do git_push.do "Final table finished"
 
 ********************************************************************************
 
@@ -76,6 +76,9 @@ egen ranking_GDP= rank(GDPpercapitaPPS), field
 egen ranking_MEDIAN = rank(TOTAL_T_MED_E_PPS), field
 egen ranking_AVERAGE = rank(TOTAL_T_MEI_E_PPS), field
 
+egen average_ranking = rowmean(ranking_AVERAGE ranking_GDP ranking_MEDIAN)
+sort average_ranking
+br
 save ./04_master/final_table, clear
 
 
