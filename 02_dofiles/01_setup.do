@@ -23,7 +23,7 @@ discard // drop all ado programs in memory
 
 xteurostat `filename' `filter', g(country) clear
 
-local eu_countries AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE EU27_2020
+local eu_countries AT BE BG CY CZ DK EE FI FR DE EL HR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE EU27_2020
 
 * Drops countries that aren't members of the EU
 {
@@ -67,8 +67,7 @@ kountry country, from(iso2c)
 drop country
 rename NAMES_STD country
 order country
-
 cap replace country = "European Union - 27 countries" if country == "eu27_2020"
 
 * Saves the final file
-save ./04_master/`filename'_`filter'.dta, replace
+save ./04_master/`filename'_`filter'_`time'.dta, replace

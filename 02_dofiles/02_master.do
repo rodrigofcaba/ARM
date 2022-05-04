@@ -50,8 +50,36 @@ foreach x of local filenames {
 	do ./02_dofiles/01_setup.do `filter' `x' `time'
 }
 
-keep country TOTAL_T_MEI_E_PPS
+keep country TOTAL_T_MEI_E_PPS TOTAL_T_MED_E_PPS
+
+replace country= "Czechia" if country == "Czech Republic"
+replace country= "Slovakia" if country == "Slovak Republic"
+
+save ./01_raw/ilc_di03_PPS.dta, replace
+
+import excel using "./01_raw/tabla", firstrow sheet("Hoja2") clear
+
+merge 1:1 country using "./01_raw/ilc_di03_PPS"
+
+drop _merge
+
+recode TOTAL_T_MED_E_PPS .= 10175 if country == "Greece"
+recode TOTAL_T_MEI_E_PPS .= 11635 if country == "Greece"
+drop if country == "el"
+
 sort country
+
+label variable TOTAL_T_MED_E_PPS "Median Income (PPS)"
+label variable TOTAL_T_MEI_E_PPS "Average Income (PPS)"
+
+egen ranking_GDP= rank(GDPpercapitaPPS), field
+egen ranking_MEDIAN = rank(TOTAL_T_MED_E_PPS), field
+egen ranking_AVERAGE = rank(TOTAL_T_MEI_E_PPS), field
+
+save ./04_master/final_table, clear
+
+
+
 ********************************************************************************
 
 *********************
